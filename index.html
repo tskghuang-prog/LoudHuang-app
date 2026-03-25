@@ -29,13 +29,15 @@
         s2.src = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js';
         s2.onload = function() {
           try {
+            // 替換為新的 Firebase 後端設定
             firebase.initializeApp({
-              apiKey: "AIzaSyC51BP5aNZLri2TzyAqtocFT11JcbgNpOw",
-              authDomain: "loudhuang-app.firebaseapp.com",
-              projectId: "loudhuang-app",
-              storageBucket: "loudhuang-app.firebasestorage.app",
-              messagingSenderId: "803943803988",
-              appId: "1:803943803988:web:1f0d6c2c591e30f2af11c1"
+              apiKey: "AIzaSyDUa5iD33f0Crv4Pq2IbKD2Sadkkdsenp0",
+              authDomain: "yinghan-community-db.firebaseapp.com",
+              projectId: "yinghan-community-db",
+              storageBucket: "yinghan-community-db.firebasestorage.app",
+              messagingSenderId: "562651713458",
+              appId: "1:562651713458:web:31b7c65b1bda1d394b5eab",
+              measurementId: "G-VH5Z7SBH8Z"
             });
             window.firedb = firebase.firestore();
             window.dbMode = 'cloud';
@@ -125,6 +127,7 @@ function App() {
   
   useEffect(()=>{if(vtimer<=0||!voting)return;const i=setInterval(()=>setVtimer(v=>{if(v<=1){clearInterval(i);setVoting(p=>p?{...p,ended:true}:null);return 0}return v-1}),1000);return()=>clearInterval(i)},[voting,vtimer]);
 
+  // 最高管理帳號密碼保留 superadmin / admin123 不變
   const login=async(u,p,role)=>{
     if(role==="superadmin"){if(u==="superadmin"&&p==="admin123"){const a={role:"superadmin",username:u};setAuth(a);await db.s("auth",a);setPg("home");flash("歡迎回來，最高管理者")}else flash("帳號或密碼錯誤","err")}
     else if(role==="admin"){const all=await db.g("admins")||[];const f=all.find(a=>a.username===u&&a.password===p);
@@ -227,6 +230,8 @@ function LoginScreen({onLogin}){const[u,su]=useState(""),[p,sp]=useState(""),[r,
       <Lb>登入身份</Lb><Sel value={r} onChange={e=>sr(e.target.value)}><option value="resident">住戶</option><option value="admin">管理者</option><option value="superadmin">最高管理者</option></Sel>
       <Btn full onClick={()=>onLogin(u,p,r)} style={{marginTop:12,padding:"16px",fontSize:17}}>登 入</Btn></Card>
     <DbStatus/>
+    {/* 新增的 LoudHuang 監製字樣 */}
+    <div style={{textAlign:"center", marginTop: 24, fontSize: 13, color: P.txt3, fontWeight: 600, letterSpacing: 1}}>LoudHuang監製</div>
     </div>}
 
 // ─── DB Status ───
@@ -519,7 +524,6 @@ const Z={
   attBar:{background:P.priL,padding:"10px 16px",display:"flex",alignItems:"center",justifyContent:"center",gap:8,fontSize:14,fontWeight:600,color:P.pri},
   vBtn:{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:4,padding:"16px 8px",borderRadius:14,border:"none",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"},
 };
-
 
 ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
   </script>
